@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <favicon type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Telegram_Messenger.png/600px-Telegram_Messenger.png?20140820175819">
+    <title>GET USERNAME</title>
+    <script>
+        // Get username from telegram by phone number
+        function formatPhoneNumber(phoneNumber) {
+            const pattern = /[​ ,:\/\?&#\-"'.,\+a-zA-Z]/g; // also remove unicode whitespace
+            let num = phoneNumber.replace(pattern, "");
+            num = num.match(/[0-9]+/g).join("");
+            num = num.replace(/^0+/, "");
+
+            if (num.length >= 11) {
+                return num;
+            } else {
+                return "+855" + num;
+            }
+        }
+
+        function getTelegramUsername(phoneNumber) {
+            let url = `https://t.me/${phoneNumber}`;
+            return url;
+        }
+    </script>
+</head>
+<body>
+
+    <h3>Get Telegram Username by Phone Number</h3>
+    <p>Enter phone number to get telegram username</p>
+    <textarea id="phone_number" cols="30" rows="10" placeholder="Enter list phone number"></textarea>
+    <br>
+    <small style="color: red;">input list of phone number separated by enter</small>
+    <br>
+    <button onclick="getTelegramUsernameByPhoneNumber(document.getElementById('phone_number').value)">Get Username</button>
+    <div id="container" style="flex-wrap: wrap; margin-top: 1%;"> </div>
+    <script>
+        function getTelegramUsernameByPhoneNumber(phoneNumber) {
+            let list = phoneNumber.split("\n");
+            let container = document.getElementById('container');
+            const image_avatar = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Telegram_Messenger.png/600px-Telegram_Messenger.png?20140820175819";
+            container.innerHTML = "";
+            for (let i = 0; i < list.length; i++) {
+                let phone = formatPhoneNumber(list[i]);
+                let username = getTelegramUsername(phone);
+                // click image to open telegram
+                let div = document.createElement('div');
+                div.innerHTML = `<a href="${username}" target="_blank"><img src="${image_avatar}" alt="avatar" width="50" height="50"></a>`;
+                div.innerHTML += `<span style="position: relative; top: -20px; padding-left: 10px;">
+                    <a href="${username}" target="_blank">${phone}</a></span>`;
+                div.innerHTML += `</br></br>`;
+                container.appendChild(div);
+            }
+
+        }
+    </script>
+    
+</body>
+</html>
